@@ -5,6 +5,12 @@ using Valve.VR;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum HMDType
+    {
+        OCULUS_RIFT,
+        VIVE
+    }
+
     Vector2 thumbPos = new Vector2(1f,1f);
     bool move = false;
     bool rotate = false;
@@ -17,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed;
     public float rotationSpeed;
     public bool debug = false;
+    public HMDType HMD_Type = HMDType.VIVE;
 
     public Animator[] nearbyDoors;
 
@@ -39,23 +46,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 facing = new Vector3 (hmdCam.transform.forward.x, 0f, hmdCam.transform.forward.z);
-        Vector3.Normalize(facing);
-        Vector3 moveDir = new Vector3(facing.x * thumbPos.x, 0f, facing.z * thumbPos.y);
-        string debugstr = "Facing- X: " + facing.x.ToString("F2") + " Y: " + facing.y.ToString("F2") + " Z: " + facing.z.ToString("F2");
-        debugText.text = debugstr;
-
         checkKeys();
-
-        if (move)
-        {
-            rb.AddForce(moveDir * movementSpeed * Time.deltaTime);
-        }
-        if (rotate)
-        {
-            transform.Rotate(0, Time.deltaTime * rotationSpeed, 0);
-        }
-
         foreach (Animator ani in nearbyDoors)
         {
             if (Vector3.Distance(transform.position, ani.transform.position) < 2.5f)
@@ -65,6 +56,28 @@ public class PlayerController : MonoBehaviour
             {
                 ani.SetBool(doorNearbyTriggerStr, false);
             }
+        }
+    }
+
+    // Called at a fixed time segment
+    void FixedUpdate()
+    {
+        float movementAmount = (HMD_Type == HMDType.VIVE) ? thumbPos.x : thumbPos.y;
+
+        Vector3 facing = new Vector3(hmdCam.transform.forward.x, 0f, hmdCam.transform.forward.z);
+        Vector3.Normalize(facing);
+        Vector3 moveDir = new Vector3(facing.x * movementAmount, 0f, facing.z * movementAmount);
+        string debugstr = "Facing- X: " + facing.x.ToString("F2") + " Y: " + facing.y.ToString("F2") + " Z: " + facing.z.ToString("F2");
+        debugText.text = debugstr;
+
+
+        if (move)
+        {
+            rb.AddForce(moveDir * movementSpeed * Time.fixedDeltaTime);
+        }
+        if (rotate)
+        {
+            transform.Rotate(0, rotationSpeed * Time.fixedDeltaTime, 0);
         }
     }
 
