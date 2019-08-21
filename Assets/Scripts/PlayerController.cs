@@ -130,13 +130,11 @@ public class PlayerController : MonoBehaviour
 
     public void UpdateThumbPos(Valve.VR.SteamVR_Behaviour_Vector2 beh, SteamVR_Input_Sources src, Vector2 v1, Vector2 v2)
     {
-        Debug.Log("updating Thumb Pos");
         this.thumbPos = v1;
     }
 
     public void UpdateThumbPressDown(SteamVR_Behaviour_Boolean beh, SteamVR_Input_Sources src, bool pressed)
     {
-        Debug.Log("entered thumb press down");
         if (pressed)
         {
             move = true;
@@ -145,7 +143,6 @@ public class PlayerController : MonoBehaviour
 
     public void UpdateThumbLiftUp(SteamVR_Behaviour_Boolean beh, SteamVR_Input_Sources src, bool lift)
     {
-        Debug.Log("entered thumb lift up");
         if (!lift)
         {
             move = false;
