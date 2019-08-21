@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
         VIVE
     }
 
+    private DoorController[] doorUpdate = new DoorController[2];
+
     Vector2 thumbPos = new Vector2(1f,1f);
     bool move = false;
     bool rotate = false;
@@ -26,12 +28,15 @@ public class PlayerController : MonoBehaviour
     public HMDType HMD_Type = HMDType.VIVE;
 
     public Animator[] nearbyDoors;
+    public DoorController startingDC;
 
     private string doorNearbyTriggerStr = "character_nearby";
+    private float doorNearbyDistance = 4f;
 
     // Start is called before the first frame update
     void Start()
     {
+        doorUpdate[0] = startingDC;
         if (!debug)
         {
             debugPlane.SetActive(false);
@@ -41,6 +46,13 @@ public class PlayerController : MonoBehaviour
         }
         debugText = debugPlane.GetComponentInChildren<TextMesh>();
         rb = GetComponent<Rigidbody>();
+
+        DoorController[] dcs = FindObjectsOfType(typeof(DoorController)) as DoorController[];
+        foreach(DoorController dc in dcs)
+        {
+            dc.activateLights(false);
+        }
+        startingDC.activateLights(true);
     }
 
     // Update is called once per frame
@@ -49,8 +61,13 @@ public class PlayerController : MonoBehaviour
         checkKeys();
         foreach (Animator ani in nearbyDoors)
         {
-            if (Vector3.Distance(transform.position, ani.transform.position) < 2.5f)
+            if (Vector3.Distance(transform.position, ani.transform.position) < doorNearbyDistance)
             {
+                DoorController dc = ani.gameObject.GetComponent<DoorController>();
+                if (dc != null)
+                {
+                    atDoor(dc);
+                }
                 ani.SetBool(doorNearbyTriggerStr, true);
             } else
             {
@@ -78,6 +95,39 @@ public class PlayerController : MonoBehaviour
         if (rotate)
         {
             transform.Rotate(0, rotationSpeed * Time.fixedDeltaTime, 0);
+        }
+    }
+
+    void atDoor(DoorController dc)
+    {
+        if (doorUpdate[0] == null)
+        {
+            doorUpdate[0] = dc;
+            doorUpdate[0].activateLights(true);
+            return;
+        }
+
+        if (doorUpdate[1] == null)
+        {
+            if (doorUpdate[0] == dc)
+            {
+                return;
+            } else
+            {
+                doorUpdate[1] = dc;
+                doorUpdate[0].activateLights(false);
+                doorUpdate[1].activateLights(true);
+            }
+        }
+
+        if (doorUpdate[1] == dc)
+        {
+            return;
+        } else {
+            doorUpdate[0] = doorUpdate[1];
+            doorUpdate[1] = dc;
+            doorUpdate[0].activateLights(false);
+            doorUpdate[1].activateLights(true);
         }
     }
 
