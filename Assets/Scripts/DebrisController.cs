@@ -40,9 +40,9 @@ public class DebrisController : MonoBehaviour
         DebriObject.orbitPoint = this.transform.position;
         debri = new DebriObject[numOfAsteroids+numOfSpaceJunk+1];
         Vector3 v1 = Random.insideUnitSphere;
-        Vector3 v2 = v1 * (maxDistance - midDistance) * 3;
+        Vector3 v2 = v1 * (maxDistance - midDistance) * 2;
         Vector3 v3 = v1.normalized;
-        Vector3 v4 = v3 * midDistance * 3;
+        Vector3 v4 = v3 * midDistance * 2;
         Vector3 spawnPos = v4 + v2;
         Quaternion rot = Random.rotation;
         GameObject newobj = Instantiate(earth, spawnPos, rot, transform);
