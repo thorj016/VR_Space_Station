@@ -5,11 +5,6 @@ using Valve.VR;
 
 public class PlayerController : MonoBehaviour
 {
-    public enum HMDType
-    {
-        OCULUS_RIFT,
-        VIVE
-    }
 
     private DoorController[] doorUpdate = new DoorController[2];
 
@@ -25,7 +20,6 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed;
     public float rotationSpeed;
     public bool debug = false;
-    public HMDType HMD_Type = HMDType.VIVE;
 
     public Animator[] nearbyDoors;
     public DoorController startingDC;
@@ -50,9 +44,9 @@ public class PlayerController : MonoBehaviour
         DoorController[] dcs = FindObjectsOfType(typeof(DoorController)) as DoorController[];
         foreach(DoorController dc in dcs)
         {
-            dc.activateLights(false);
+            dc.activateRooms(false);
         }
-        startingDC.activateLights(true);
+        startingDC.activateRooms(true);
     }
 
     // Update is called once per frame
@@ -79,10 +73,10 @@ public class PlayerController : MonoBehaviour
     // Called at a fixed time segment
     void FixedUpdate()
     {
-        float movementAmount = (HMD_Type == HMDType.VIVE) ? thumbPos.x : thumbPos.y;
+        float movementAmount = thumbPos.y;
 
         Vector3 facing = new Vector3(hmdCam.transform.forward.x, 0f, hmdCam.transform.forward.z);
-        Vector3.Normalize(facing);
+        facing = facing.normalized;
         Vector3 moveDir = new Vector3(facing.x * movementAmount, 0f, facing.z * movementAmount);
         string debugstr = "Facing- X: " + facing.x.ToString("F2") + " Y: " + facing.y.ToString("F2") + " Z: " + facing.z.ToString("F2");
         debugText.text = debugstr;
@@ -103,7 +97,7 @@ public class PlayerController : MonoBehaviour
         if (doorUpdate[0] == null)
         {
             doorUpdate[0] = dc;
-            doorUpdate[0].activateLights(true);
+            doorUpdate[0].activateRooms(true);
             return;
         }
 
@@ -115,8 +109,8 @@ public class PlayerController : MonoBehaviour
             } else
             {
                 doorUpdate[1] = dc;
-                doorUpdate[0].activateLights(false);
-                doorUpdate[1].activateLights(true);
+                doorUpdate[0].activateRooms(false);
+                doorUpdate[1].activateRooms(true);
             }
         }
 
@@ -126,8 +120,8 @@ public class PlayerController : MonoBehaviour
         } else {
             doorUpdate[0] = doorUpdate[1];
             doorUpdate[1] = dc;
-            doorUpdate[0].activateLights(false);
-            doorUpdate[1].activateLights(true);
+            doorUpdate[0].activateRooms(false);
+            doorUpdate[1].activateRooms(true);
         }
     }
 

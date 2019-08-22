@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3398946}
   - component: {fileID: 2341864}
   - component: {fileID: 1655338868760121354}
+  - component: {fileID: 1561479554210718961}
+  - component: {fileID: 2745433634279789937}
   m_Layer: 0
   m_Name: glass_panel_1_door
   m_TagString: Untagged
@@ -93,6 +95,31 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.3235092, y: 2.9869292, z: 0.13877574}
   m_Center: {x: -0.6881752, y: 1.4934646, z: -0.014756661}
+--- !u!135 &1561479554210718961
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127260}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.13739014
+  m_Center: {x: -1.0168936, y: 1.4934645, z: -0.01269412}
+--- !u!114 &2745433634279789937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b530e7093497c9d4cbb54debb96c792f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &141970
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +133,7 @@ GameObject:
   - component: {fileID: 2331942}
   - component: {fileID: 9575016}
   - component: {fileID: 6452128}
-  - component: {fileID: 5151332499453215046}
+  - component: {fileID: 8201687614198876483}
   m_Layer: 0
   m_Name: glass_panel_1_with_door
   m_TagString: Untagged
@@ -209,16 +236,15 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 1d8fb1d801abb5741a1a870b2e3986dd, type: 3}
---- !u!135 &5151332499453215046
-SphereCollider:
+--- !u!114 &8201687614198876483
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 141970}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.22753096
-  m_Center: {x: -0.3428102, y: 1.4934645, z: 0.07247156}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b637c1fbeb226649baea146a2338a6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

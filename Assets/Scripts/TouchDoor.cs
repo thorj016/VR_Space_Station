@@ -30,15 +30,4 @@ public class TouchDoor : MonoBehaviour
     {
         ani.SetBool(touchTriggerString, false);
     }
-
-    private void OntriggerEntered(Collision collision)
-    {
-        if (ani.GetCurrentAnimatorStateInfo(0).IsName("glass_door_opened"))
-        {
-            closeDoor();
-        } else if (ani.GetCurrentAnimatorStateInfo(0).IsName("glass_door_closed"))
-        {
-            openDoor();
-        }
-    }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
-    public GameObject[] associatedLights;
+    public GameObject[] associatedRooms;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,14 +14,20 @@ public class DoorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        this.gameObject.SetActive(true);
     }
 
-    public void activateLights(bool active)
+    public void activateRooms(bool active)
     {
-        foreach (GameObject l in associatedLights)
+        foreach (GameObject l in associatedRooms)
         {
-            l.SetActive(active);
+            foreach (RoomController rc in l.GetComponents<RoomController>())
+            {
+                foreach (GameObject go in rc.removeOnLeave)
+                {
+                    go.SetActive(active);
+                }
+            }
         }
     }
 }

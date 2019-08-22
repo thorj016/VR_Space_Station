@@ -45,9 +45,8 @@ public class DebrisController : MonoBehaviour
         Vector3 v4 = v3 * midDistance * 3;
         Vector3 spawnPos = v4 + v2;
         Quaternion rot = Random.rotation;
-        earth.transform.localPosition = spawnPos;
-        earth.transform.localRotation = rot;
-        debri[numOfAsteroids + numOfSpaceJunk] = new DebriObject(earth, spawnPos, rot, this.transform);
+        GameObject newobj = Instantiate(earth, spawnPos, rot, transform);
+        debri[numOfAsteroids + numOfSpaceJunk] = new DebriObject(newobj);
         debri[numOfAsteroids + numOfSpaceJunk].orbitDir = Random.rotation.eulerAngles;
         debri[numOfAsteroids + numOfSpaceJunk].orbitSpeed = Random.Range(astMinOrbitSpeed, astMaxOrbitSpeed) /10;
         debri[numOfAsteroids + numOfSpaceJunk].debri.transform.localScale *= earthScale;
@@ -72,8 +71,8 @@ public class DebrisController : MonoBehaviour
             v4 = v3 * minDistance;
             spawnPos = v4 + v2;
             rot = Random.rotation;
-
-            debri[i] = new DebriObject(ast, spawnPos,rot,this.transform);
+            newobj = Instantiate(ast, spawnPos, rot, this.transform);
+            debri[i] = new DebriObject(newobj);
             debri[i].rotationSpeed = Random.Range(astMinRotationSpeed, astMaxRotationSpeed);
             debri[i].orbitDir = Random.rotation.eulerAngles;
             debri[i].orbitSpeed = Random.Range(astMinOrbitSpeed, astMaxOrbitSpeed);
@@ -90,8 +89,8 @@ public class DebrisController : MonoBehaviour
             v4 = v3 * midDistance;
             spawnPos = v4 + v2;
             rot = Random.rotation;
-
-            debri[i+numOfAsteroids] = new DebriObject(junk, spawnPos, rot, this.transform);
+            newobj = Instantiate(junk, spawnPos, rot, this.transform);
+            debri[i + numOfAsteroids] = new DebriObject(newobj);
             debri[i + numOfAsteroids].rotationSpeed = Random.Range(junkMinRotationSpeed, junkMaxRotationSpeed);
             debri[i + numOfAsteroids].orbitDir = Random.rotation.eulerAngles;
             debri[i + numOfAsteroids].orbitSpeed = Random.Range(junkMinOrbitSpeed, junkMaxOrbitSpeed);

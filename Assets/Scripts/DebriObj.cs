@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebriObject : MonoBehaviour
+public class DebriObject
 {
     public static Vector3 orbitPoint;
     public GameObject debri;
@@ -11,10 +11,9 @@ public class DebriObject : MonoBehaviour
     public Vector3 orbitDir;
     public float orbitSpeed;
 
-    public DebriObject( GameObject debri, Vector3 spawnPos, Quaternion localRotation, Transform parent)
+    public DebriObject( GameObject debri)
     {
-        this.debri = Instantiate(debri, spawnPos, localRotation, parent);
-        rotationDir = localRotation.eulerAngles;
+        this.debri = debri;
     }
 
     // Start is called before the first frame update
