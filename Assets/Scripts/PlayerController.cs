@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public DoorController startingDC;
     public GameObject[] gameControllers;
 
+    private Transform footprintTransform;
     private string doorNearbyTriggerStr = "character_nearby";
     private float doorNearbyDistance = 4f;
 
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         doorUpdate[0] = startingDC;
+
         if (!debug)
         {
             debugPlane.SetActive(false);
@@ -39,8 +41,18 @@ public class PlayerController : MonoBehaviour
         {
             debugPlane.SetActive(true);
         }
+
         debugText = debugPlane.GetComponentInChildren<TextMesh>();
         rb = GetComponent<Rigidbody>();
+
+        foreach (Transform t in gameObject.GetComponentInChildren<Transform>())
+        {
+            if (t.CompareTag("Footprint"))
+            {
+                footprintTransform = t;
+                break;
+            }
+        }
 
         DoorController[] dcs = FindObjectsOfType(typeof(DoorController)) as DoorController[];
         foreach(DoorController dc in dcs)
@@ -54,6 +66,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         checkKeys();
+        footprintTransform.eulerAngles.Set(footprintTransform.eulerAngles.x, hmdCam.transform.eulerAngles.y ,footprintTransform.eulerAngles.z);
         foreach (Animator ani in nearbyDoors)
         {
             if (Vector3.Distance(transform.position, ani.transform.position) < doorNearbyDistance)
