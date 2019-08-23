@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     public Animator[] nearbyDoors;
     public DoorController startingDC;
+    public GameObject[] gameControllers;
 
     private string doorNearbyTriggerStr = "character_nearby";
     private float doorNearbyDistance = 4f;
@@ -170,6 +171,23 @@ public class PlayerController : MonoBehaviour
 
 
 
+    }
+    public void ActionButtonPressed(SteamVR_Behaviour_Boolean beh, SteamVR_Input_Sources src, bool pressed)
+    {
+        SphereCollider[] colliders = new SphereCollider[gameControllers.Length];
+        int i = 0;
+
+        foreach (GameObject o in gameControllers)
+        {
+            SphereCollider comp = o.GetComponent<SphereCollider>();
+            if (comp != null)
+            {
+                colliders[i] = comp;
+                i++;
+            }
+        }
+
+        //TODO OPERATE COMPUTER
     }
 
     public void UpdateThumbPos(Valve.VR.SteamVR_Behaviour_Vector2 beh, SteamVR_Input_Sources src, Vector2 v1, Vector2 v2)

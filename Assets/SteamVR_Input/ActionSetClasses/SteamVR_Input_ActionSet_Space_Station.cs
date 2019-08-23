@@ -32,5 +32,13 @@ namespace Valve.VR
                 return SteamVR_Actions.space_Station_LeftTouchpadPressed;
             }
         }
+        
+        public virtual SteamVR_Action_Boolean ActionPressed
+        {
+            get
+            {
+                return SteamVR_Actions.space_Station_ActionPressed;
+            }
+        }
     }
 }
