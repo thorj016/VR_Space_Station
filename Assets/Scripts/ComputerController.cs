@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ComputerController : MonoBehaviour
+public class ComputerController : MonoBehaviour, InteractionInterface
 {
-    bool interactable = false;
+    public enum InteractionType
+    {
+        DOOR
+    }
+    public InteractionType interactionType;
+    public DoorController associatedDoor;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,19 +22,27 @@ public class ComputerController : MonoBehaviour
         
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void interact(bool active)
     {
-        if (other.CompareTag("GameController"))
+        switch (interactionType)
         {
-            interactable = true;
-        }
-    }
-
-    public void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("GameController"))
-        {
-            interactable = false;
+            case InteractionType.DOOR:
+                if (active)
+                {
+                    associatedDoor.openDoor();
+                    foreach (BoxCollider col in associatedDoor.GetComponentsInChildren<BoxCollider>())
+                    {
+                        col.enabled = false;
+                    }
+                } else
+                {
+                    associatedDoor.closeDoor();
+                    foreach (BoxCollider col in associatedDoor.GetComponentsInChildren<BoxCollider>())
+                    {
+                        col.enabled = true;
+                    }
+                }
+                break;
         }
     }
 }

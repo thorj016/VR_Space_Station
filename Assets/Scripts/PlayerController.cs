@@ -15,44 +15,25 @@ public class PlayerController : MonoBehaviour
     public Camera hmdCam;
     
     public GameObject debugPlane;
-    TextMesh debugText;
 
     public float movementSpeed;
     public float rotationSpeed;
-    public bool debug = false;
 
-    public Animator[] nearbyDoors;
+    public DoorController[] nearbyDoors;
     public DoorController startingDC;
     public GameObject[] gameControllers;
+    private SphereCollider[] controllerColliders;
 
-    private Transform footprintTransform;
-    private string doorNearbyTriggerStr = "character_nearby";
+    public Transform footprintTransform;
     private float doorNearbyDistance = 4f;
+    private List<Collider> currentColliding = new List<Collider>();
 
     // Start is called before the first frame update
     void Start()
     {
         doorUpdate[0] = startingDC;
-
-        if (!debug)
-        {
-            debugPlane.SetActive(false);
-        } else
-        {
-            debugPlane.SetActive(true);
-        }
-
-        debugText = debugPlane.GetComponentInChildren<TextMesh>();
         rb = GetComponent<Rigidbody>();
 
-        foreach (Transform t in gameObject.GetComponentInChildren<Transform>())
-        {
-            if (t.CompareTag("Footprint"))
-            {
-                footprintTransform = t;
-                break;
-            }
-        }
 
         DoorController[] dcs = FindObjectsOfType(typeof(DoorController)) as DoorController[];
         foreach(DoorController dc in dcs)
@@ -60,26 +41,40 @@ public class PlayerController : MonoBehaviour
             dc.activateRooms(false);
         }
         startingDC.activateRooms(true);
+
+        SphereCollider[] colliders = new SphereCollider[gameControllers.Length];
+        int i = 0;
+
+        foreach (GameObject o in gameControllers)
+        {
+            SphereCollider comp = o.GetComponent<SphereCollider>();
+            if (comp != null)
+            {
+                colliders[i] = comp;
+                i++;
+            }
+        }
+        controllerColliders = new SphereCollider[i];
+
+        for (int j = 0; j < i; j++)
+        {
+            controllerColliders[j] = colliders[j];
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         checkKeys();
-        footprintTransform.eulerAngles.Set(footprintTransform.eulerAngles.x, hmdCam.transform.eulerAngles.y ,footprintTransform.eulerAngles.z);
-        foreach (Animator ani in nearbyDoors)
+        foreach (DoorController dc in nearbyDoors)
         {
-            if (Vector3.Distance(transform.position, ani.transform.position) < doorNearbyDistance)
+            if (Vector3.Distance(transform.position, dc.transform.position) < doorNearbyDistance)
             {
-                DoorController dc = ani.gameObject.GetComponent<DoorController>();
-                if (dc != null)
-                {
-                    atDoor(dc);
-                }
-                ani.SetBool(doorNearbyTriggerStr, true);
+                dc.openDoor();
+                atDoor(dc);
             } else
             {
-                ani.SetBool(doorNearbyTriggerStr, false);
+                dc.closeDoor();
             }
         }
     }
@@ -90,10 +85,9 @@ public class PlayerController : MonoBehaviour
         float movementAmount = thumbPos.y;
 
         Vector3 facing = new Vector3(hmdCam.transform.forward.x, 0f, hmdCam.transform.forward.z);
-        facing = facing.normalized;
         Vector3 moveDir = new Vector3(facing.x * movementAmount, 0f, facing.z * movementAmount);
-        string debugstr = "Facing- X: " + facing.x.ToString("F2") + " Y: " + facing.y.ToString("F2") + " Z: " + facing.z.ToString("F2");
-        debugText.text = debugstr;
+
+        footprintTransform.rotation = Quaternion.LookRotation(facing * -1);
 
 
         if (move)
@@ -104,6 +98,16 @@ public class PlayerController : MonoBehaviour
         {
             transform.Rotate(0, rotationSpeed * Time.fixedDeltaTime, 0);
         }
+    }
+
+    public void addToCurrentColliding(Collider col)
+    {
+        currentColliding.Add(col);
+    }
+
+    public void removeFromCurrentColliding(Collider col)
+    {
+        currentColliding.Remove(col);
     }
 
     void atDoor(DoorController dc)
@@ -187,20 +191,16 @@ public class PlayerController : MonoBehaviour
     }
     public void ActionButtonPressed(SteamVR_Behaviour_Boolean beh, SteamVR_Input_Sources src, bool pressed)
     {
-        SphereCollider[] colliders = new SphereCollider[gameControllers.Length];
-        int i = 0;
+        if (!pressed) return;
 
-        foreach (GameObject o in gameControllers)
+        foreach (Collider c in currentColliding)
         {
-            SphereCollider comp = o.GetComponent<SphereCollider>();
-            if (comp != null)
+            InteractionInterface interact = c.GetComponent<InteractionInterface>();
+            if (interact != null)
             {
-                colliders[i] = comp;
-                i++;
+                interact.interact(true);
             }
         }
-
-        //TODO OPERATE COMPUTER
     }
 
     public void UpdateThumbPos(Valve.VR.SteamVR_Behaviour_Vector2 beh, SteamVR_Input_Sources src, Vector2 v1, Vector2 v2)
