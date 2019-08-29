@@ -5,10 +5,12 @@ using UnityEngine;
 public class DoorController : MonoBehaviour
 {
     public GameObject[] associatedRooms;
+    private Animator ani;
+    private string dooropenclosestr = "character_nearby";
     // Start is called before the first frame update
     void Start()
     {
-        
+        ani = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -29,5 +31,16 @@ public class DoorController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void openDoor()
+    {
+        activateRooms(true);
+        ani.SetBool(dooropenclosestr, true);
+    }
+
+    public void closeDoor()
+    {
+        ani.SetBool(dooropenclosestr, false);
     }
 }

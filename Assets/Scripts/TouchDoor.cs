@@ -7,7 +7,6 @@ public class TouchDoor : MonoBehaviour
     private Animator ani;
     private SphereCollider handleCol;
     private string touchTriggerString = "character_nearby";
-    private bool doorOpen = false;
     // Start is called before the first frame update
     void Start()
     {

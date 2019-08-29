@@ -41,11 +41,6 @@
       "requirement": "optional"
     },
     {
-      "name": "/actions/default/in/TouchPosition",
-      "type": "vector3",
-      "requirement": "mandatory"
-    },
-    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
