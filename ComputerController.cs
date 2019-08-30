@@ -14,16 +14,12 @@ public class ComputerController : MonoBehaviour, InteractionInterface
     public Light[] lights;
     private Quaternion startingPos;
     private Quaternion handStartingPos;
-    private float curRotation = 0;
+    private float maxDegreesRot = 90;
     private bool grabbed = false;
-    public Transform dial;
     // Start is called before the first frame update
     void Start()
     {
-        if (dial != null)
-        {
-            startingPos = dial.rotation;
-        }
+        startingPos = transform.rotation;
     }
 
     // Update is called once per frame
@@ -50,30 +46,26 @@ public class ComputerController : MonoBehaviour, InteractionInterface
 
     public void grabPress(Transform caller)
     {
+        Debug.Log("Grab Pressed");
         switch (interactionType)
         {
             case InteractionType.DIMMER:
-                handStartingPos = caller.localRotation;
+                handStartingPos = caller.rotation;
                 break;
         }
     }
     public void grabHeld(Transform caller)
     {
+        Debug.Log("Grab held");
         switch (interactionType)
         {
             case InteractionType.DIMMER:
-                float handAngel = handStartingPos.eulerAngles.z - caller.eulerAngles.z;
-                handStartingPos = caller.localRotation;
-                curRotation += handAngel;
-                
-                dial.rotation = Quaternion.AngleAxis(curRotation, dial.forward);
-
-                Debug.Log(handAngel + " | " + curRotation);
                 break;
         }
     }
     public void grabRelease(Transform caller)
     {
+        Debug.Log("Grab Released");
         switch (interactionType)
         {
             case InteractionType.DIMMER:

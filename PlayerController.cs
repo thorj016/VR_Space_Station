@@ -28,12 +28,13 @@ public class PlayerController : MonoBehaviour
     private float doorNearbyDistance = 4f;
     private List<HandController.handCollision> currentColliding = new List<HandController.handCollision>();
 
+    public SteamVR_Action_Boolean grab;
+
     // Start is called before the first frame update
     void Start()
     {
         doorUpdate[0] = startingDC;
         rb = GetComponent<Rigidbody>();
-
 
         DoorController[] dcs = FindObjectsOfType(typeof(DoorController)) as DoorController[];
         foreach(DoorController dc in dcs)
@@ -219,7 +220,6 @@ public class PlayerController : MonoBehaviour
 
     public void GrabLiftUp(SteamVR_Behaviour_Boolean beh, SteamVR_Input_Sources src, bool pressed)
     {
-
         foreach (HandController.handCollision c in currentColliding)
         {
             InteractionInterface interact = c.col.GetComponent<InteractionInterface>();
@@ -232,7 +232,6 @@ public class PlayerController : MonoBehaviour
 
     public void GrabPressedDown(SteamVR_Behaviour_Boolean beh, SteamVR_Input_Sources src, bool pressed)
     {
-        if (!pressed) return;
 
         foreach (HandController.handCollision c in currentColliding)
         {

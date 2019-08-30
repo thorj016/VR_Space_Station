@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.spacestationvive.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "C:\\Users\\wcl\\Documents\\thorj016\\VR_Space_Station\\actions.json",
+      "action_manifest_path": "C:\\Users\\thorj016\\source\\repos\\VR_Space_Station\\actions.json",
       "strings": {
         "en_us": {
           "name": "Space Station Vive [Testing]"
